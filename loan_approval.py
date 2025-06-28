@@ -5,17 +5,17 @@ import streamlit as st
 import pickle 
 from sklearn.preprocessing import OrdinalEncoder
 
-@st.cache()
-with open('loan_prediction_model.pkl', 'rb') as f:
-    model = pickle.load(f)
-
-
 # Set page config
 st.set_page_config(
     page_title="Loan Prediction App",
     page_icon="💰",
     layout="centered"
 )
+
+@st.cache_ressource
+with open('loan_prediction_model.pkl', 'rb') as f:
+    model = pickle.load(f)
+
 
 st.header('Loan Approval Predction Appppppp')
 
