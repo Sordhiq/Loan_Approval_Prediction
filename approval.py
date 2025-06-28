@@ -5,26 +5,30 @@ import pickle as pk
 
 model = pk.load(open('model.pkl','rb'))
 
-st.header('Loan Predction App')
+# Set page config
+st.set_page_config(
+    page_title="Loan Prediction App",
+    page_icon="💰",
+    layout="centered"
+)
 
-no_of_dep = st.slider('Choose No of dependents', 0,5)
-grad = st.selectbox('Choose Education', ['Graduated', 'Not Graduated'])
-self_emp = st.selectbox('Self Emoployed ?', ['Yes', 'No'])
-Annual_Income = st.slider('Choose Annual Income', 0, 10000000)
-Loan_Amount = st.slider('Choose Loan Amount', 0, 10000000)
-Loan_Dur = st.slider('Choose Loan Duration', 0, 20)
-Cibil = st.slider('Choose cibil score', 0, 1000)
-Assets = st.slider('Choose Assets', 0, 10000000)
+st.header('Loan Approval Predction App')
+
+Name = st.text_input('Kindly enter your name')
+Age = st.slider('How old are you', 18, 70)
+Account_Balance = st.number_input('Kindly enter your current account balance', min=0.0, max=1_000_000)
+Credit_Card_Balance = st.number_input('Kindly enter your credit card balance', min=0.0, max=1_000_000)
+Loan_Amount = st.number_input('How much Loan are you requesting', min=0.0, max=1_000_000)
+Loan_Type = st.selectbox('What is this loan for?', ['Personal', 'Mortgage', 'Auto'])
+Loan_Term = st.slider('Duration of loan in months', 12, 60)
+Transaction_Amount = st.slider('Last transaction amount', 0, 10000000)
+Spending_Rate = Transaction_Amount/Account_Balance
+Loan-to-Credit Ratio = Loan_Amount/5550
+
 
 #independent variables
-features = ['Spending Rate', 'Credit Card Balance', 
-3          Account Balance
-6              Loan Amount
-0                      Age
-16    Loan-to-Credit Ratio
-9       Loan Term (Months)
-5       Transaction Amount
-7                Loan Type']
+features = ['Spending_Rate', 'Credit_Card_Balance', 'Account_Balance', 'Loan_Amount', 
+            'Age, 'Loan-to-Credit Ratio', 'Loan_Term', 'Transaction_Amount', 'Loan_Type']
 X = data[features]
 #dependent variables
 dependent = 'Loan_Approved'
