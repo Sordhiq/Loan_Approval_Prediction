@@ -72,8 +72,7 @@ def main():
             st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
         else:
             st.info(f"Dear {Name}, your loan request is currently Closed.")
-    else:
-        st.error("Model not found. Please check your model file path.")
+    
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Bytes x Brains💻🧠 for the TDI Hackathon project.""")
 
