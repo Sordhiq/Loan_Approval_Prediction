@@ -23,17 +23,16 @@ def load_model():
 # Instantiate the model
 model = load_model()
 
-def main():
-    st.title("Loan Approval Prediction App")
+st.title("Loan Approval Prediction App")
 
-    html_temp = """
+html_temp = """
     <div style="background-color:teal;padding:10px">
         <h1 style="color:white;text-align:center;">Bytes x Brains 💻🧠</h1>
     </div>
     """
-    st.markdown(html_temp, unsafe_allow_html=True)
+st.markdown(html_temp, unsafe_allow_html=True)
 
-    st.subheader("Loaner Pred App")
+st.subheader("Loaner Pred App")
 # App Header
 st.header('Loan Approval Prediction App 🚀')
 
@@ -65,20 +64,20 @@ def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Ag
     prediction = model.predict(features)
     return prediction
 
-
-if st.button("Predict"):
-    if model:
-        predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance,
-                                  Loan_Amount, Age, Loan_to_Credit_Ratio,
-                                  Loan_Term, Transaction_Amount, Loan_Type)
-        if predictions[0] == 0:
-            st.success(f"Congratulations {Name}, your loan request is Approved!")
-        elif predictions[0] == 2:
-            st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
+def main():
+    if st.button("Predict"):
+        if model:
+            predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance,
+                                      Loan_Amount, Age, Loan_to_Credit_Ratio,
+                                      Loan_Term, Transaction_Amount, Loan_Type)
+            if predictions[0] == 0:
+                st.success(f"Congratulations {Name}, your loan request is Approved!")
+            elif predictions[0] == 2:
+                st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
+            else:
+                st.info(f"Dear {Name}, your loan request is currently Closed.")
         else:
-            st.info(f"Dear {Name}, your loan request is currently Closed.")
-    else:
-        st.error("Model not found. Please check your model file path.")
+            st.error("Model not found. Please check your model file path.")
 
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Bytes x Brains💻🧠 for the TDI Hackathon project.""")
