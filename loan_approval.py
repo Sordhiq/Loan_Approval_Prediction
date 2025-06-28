@@ -45,8 +45,8 @@ def main():
     """
     st.markdown(html_temp, unsafe_allow_html=True)
 
-    st.subheader("This loan prediction application is developed to be able to give realtime suggestions on approval or rejection for\
-              loan applicants, given their provided details.")
+    "This loan prediction application is developed to be able to give realtime suggestions on approval or rejection for\
+              loan applicants, given their provided details."
 
     # Inputs
     Name = st.text_input('Kindly enter your name')
