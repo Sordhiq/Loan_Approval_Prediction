@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import sklearn 
 import streamlit as st
-import pickle as pk
+import pickle 
 from sklearn.preprocessing import OrdinalEncoder
 
 @st.cache()
