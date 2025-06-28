@@ -60,7 +60,7 @@ def main():
     st.subheader("Bytes x Brains💻🧠")
 
 if st.button("Predict"):
-    predictions = predict(Spending Rate, Credit Card Balance, Account Balance, Loan Amount, Age, Loan-to-Credit Ratio, Loan Term, Transaction Amount, Loan Type)
+    predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Loan_Term, Transaction_Amount, Loan_Type)
     if predictions[0] == 0:
         st.success(f"Congratulations {Name}, your loan request is Approved!")
         print(Loan_Amount)
