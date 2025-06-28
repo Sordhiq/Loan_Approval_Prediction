@@ -28,11 +28,11 @@ st.header('Loan Approval Predction Appppppp')
 
 Name = st.text_input('Kindly enter your name')
 Age = st.slider('How old are you', 18, 70)
-Account_Balance = st.number_input('Kindly enter your current account balance', min=0.0, max=1_000_000)
-Credit_Card_Balance = st.number_input('Kindly enter your credit card balance', min=0.0, max=1_000_000)
-Loan_Amount = st.number_input('How much Loan are you requesting', min=0.0, max=1_000_000)
+Account_Balance = st.number_input('Kindly enter your current account balance', min_value=0.0, max_value=1_000_000)
+Credit_Card_Balance = st.number_input('Kindly enter your credit card balance', min_value=0.0, max_value=1_000_000)
+Loan_Amount = st.number_input('How much Loan are you requesting', min_value=0.0, max_value=1_000_000)
 Loan_Type = st.selectbox('What is this loan for?', ['Personal', 'Mortgage', 'Auto'])
-Loan_Term = st.slider('Duration of loan in months', min=1, max=60)
+Loan_Term = st.slider('Duration of loan in months', min_value=1, max_value=60)
 Transaction_Amount = st.slider('Last transaction amount', 0, 10000000)
 Spending_Rate = Transaction_Amount/Account_Balance
 Loan_to_Credit_Ratio = Loan_Amount/5550
