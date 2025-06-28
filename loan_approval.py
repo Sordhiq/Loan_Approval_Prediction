@@ -35,14 +35,14 @@ Loan_Type = st.selectbox('What is this loan for?', ['Personal', 'Mortgage', 'Aut
 Loan_Term = st.slider('Duration of loan in months', min=1, max=60)
 Transaction_Amount = st.slider('Last transaction amount', 0, 10000000)
 Spending_Rate = Transaction_Amount/Account_Balance
-Loan-to-Credit_Ratio = Loan_Amount/5550
+Loan_to_Credit_Ratio = Loan_Amount/5550
 
 
-def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Age, Loan-to-Credit_Ratio, Loan_Term, Transaction_Amount, Loan_Type):
+def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Loan_Term, Transaction_Amount, Loan_Type):
     #encoder = OrdinalEncoder() Loan_Type = encoder.fit_transform(Loan_Type).astype(int)#
     Loan_Type = Loan_Type.map({"Auto": 0, "Personal": 1, "Mortgage":2})    
     #independent variables
-    features = np.array([['Spending_Rate', 'Credit_Card_Balance', 'Account_Balance', 'Loan_Amount', 'Age', 'Loan-to-Credit_Ratio', 'Loan_Term', 'Transaction_Amount', 'Loan_Type']])
+    features = np.array([['Spending_Rate', 'Credit_Card_Balance', 'Account_Balance', 'Loan_Amount', 'Age', 'Loan_to_Credit_Ratio', 'Loan_Term', 'Transaction_Amount', 'Loan_Type']])
     prediction = model.predict(features)
     return prediction
 
