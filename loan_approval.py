@@ -23,7 +23,7 @@ def load_model():
 # Instantiate the model
 model = load_model()
 
-st.title("Loan Approval Prediction App")
+st.title("Loan Approval Prediction App🚀")
 
 html_temp = """
     <div style="background-color:teal;padding:10px">
@@ -32,9 +32,8 @@ html_temp = """
     """
 st.markdown(html_temp, unsafe_allow_html=True)
 
-st.subheader("Loaner Pred App")
-# App Header
-st.header('Loan Approval Prediction App 🚀')
+st.subheader("This loan prediction application is developed to be able to give realtime suggestions on approval or rejection for\
+              loan applicants, given their provided details.")
 
 # Inputs
 Name = st.text_input('Kindly enter your name')
@@ -78,9 +77,8 @@ def main():
                 st.info(f"Dear {Name}, your loan request is currently Closed.")
         else:
             st.error("Model not found. Please check your model file path.")
+        with st.expander("▶️ About the App!"):
+            st.write("""This loan prediction application is proudly developed by Team Bytes x Brains💻🧠 for the TDI Hackathon project.""")
 
-    with st.expander("▶️ About the App!"):
-        st.write("""This loan prediction application is proudly developed by Team Bytes x Brains💻🧠 for the TDI Hackathon project.""")
-
-if __name__ == '__main__':
+if __name__=='__main__':
     main()
