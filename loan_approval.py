@@ -64,11 +64,11 @@ def main():
     """
     st.markdown(html_temp, unsafe_allow_html=True)
 
-    st.subheader("Team Bytes x Brains 💻🧠")
+    st.subheader("Bytes x Brains 💻🧠")
 
-    if st.button("Predict"):
-        if model:
-            predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance,
+if st.button("Predict"):
+    if model:
+        predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance,
                                   Loan_Amount, Age, Loan_to_Credit_Ratio,
                                   Loan_Term, Transaction_Amount, Loan_Type)
 
