@@ -23,6 +23,17 @@ def load_model():
 # Instantiate the model
 model = load_model()
 
+def main():
+    st.title("Loan Approval Prediction App")
+
+    html_temp = """
+    <div style="background-color:teal;padding:10px">
+        <h1 style="color:white;text-align:center;">Loan Prediction App</h1>
+    </div>
+    """
+    st.markdown(html_temp, unsafe_allow_html=True)
+
+    st.subheader("Team Bytes x Brains 💻🧠")
 # App Header
 st.header('Loan Approval Prediction App 🚀')
 
@@ -53,18 +64,6 @@ def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Ag
 
     prediction = model.predict(features)
     return prediction
-
-def main():
-    st.title("Loan Approval Prediction App")
-
-    html_temp = """
-    <div style="background-color:teal;padding:10px">
-        <h1 style="color:white;text-align:center;">Loan Prediction App</h1>
-    </div>
-    """
-    st.markdown(html_temp, unsafe_allow_html=True)
-
-    st.subheader("Team Bytes x Brains 💻🧠")
 
     if st.button("Predict"):
         if model:
