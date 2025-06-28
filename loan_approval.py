@@ -6,7 +6,9 @@ import pickle as pk
 from sklearn.preprocessing import OrdinalEncoder
 
 @st.cache()
-model = pk.load(open('loan_prediction_model.pkl','rb'))
+with open('loan_prediction_model.pkl', 'rb') as f:
+    model = pickle.load(f)
+
 
 # Set page config
 st.set_page_config(
