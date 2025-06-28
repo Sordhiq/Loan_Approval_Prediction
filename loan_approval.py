@@ -71,15 +71,14 @@ if st.button("Predict"):
         predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance,
                                   Loan_Amount, Age, Loan_to_Credit_Ratio,
                                   Loan_Term, Transaction_Amount, Loan_Type)
-
-            if predictions[0] == 0:
-                st.success(f"Congratulations {Name}, your loan request is Approved!")
-            elif predictions[0] == 2:
-                st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
-            else:
-                st.info(f"Dear {Name}, your loan request is currently Closed.")
+        if predictions[0] == 0:
+            st.success(f"Congratulations {Name}, your loan request is Approved!")
+        elif predictions[0] == 2:
+            st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
         else:
-            st.error("Model not found. Please check your model file path.")
+            st.info(f"Dear {Name}, your loan request is currently Closed.")
+    else:
+        st.error("Model not found. Please check your model file path.")
 
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Bytes x Brains💻🧠 for the TDI Hackathon project.""")
