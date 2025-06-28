@@ -28,21 +28,21 @@ st.header('Loan Approval Predction Appppppp')
 
 Name = st.text_input('Kindly enter your name')
 Age = st.slider('How old are you', 18, 70)
-Account Balance = st.number_input('Kindly enter your current account balance', min=0.0, max=1_000_000)
-Credit Card Balance = st.number_input('Kindly enter your credit card balance', min=0.0, max=1_000_000)
-Loan Amount = st.number_input('How much Loan are you requesting', min=0.0, max=1_000_000)
-Loan Type = st.selectbox('What is this loan for?', ['Personal', 'Mortgage', 'Auto'])
-Loan Term (Months) = st.slider('Duration of loan in months', 1, 60)
-Transaction Amount = st.slider('Last transaction amount', 0, 10000000)
-Spending Rate = Transaction_Amount/Account_Balance
-Loan-to-Credit Ratio = Loan_Amount/5550
+Account_Balance = st.number_input('Kindly enter your current account balance', min=0.0, max=1_000_000)
+Credit_Card_Balance = st.number_input('Kindly enter your credit card balance', min=0.0, max=1_000_000)
+Loan_Amount = st.number_input('How much Loan are you requesting', min=0.0, max=1_000_000)
+Loan_Type = st.selectbox('What is this loan for?', ['Personal', 'Mortgage', 'Auto'])
+Loan_Term (Months) = st.slider('Duration of loan in months', 1, 60)
+Transaction_Amount = st.slider('Last transaction amount', 0, 10000000)
+Spending_Rate = Transaction_Amount/Account_Balance
+Loan-to-Credit_Ratio = Loan_Amount/5550
 
 
-def predict(Spending Rate, Credit Card Balance, Account Balance, Loan Amount, Age, Loan-to-Credit Ratio, Loan Term, Transaction Amount, Loan Type):
+def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Age, Loan-to-Credit_Ratio, Loan_Term, Transaction_Amount, Loan_Type):
     #encoder = OrdinalEncoder() Loan_Type = encoder.fit_transform(Loan_Type).astype(int)#
     Loan_Type = Loan_Type.map({"Auto": 0, "Personal": 1, "Mortgage":2})    
     #independent variables
-    features = np.array([['Spending Rate', 'Credit Card Balance', 'Account Balance', 'Loan Amount', 'Age', 'Loan-to-Credit Ratio', 'Loan Term', 'Transaction Amount', 'Loan Type']])
+    features = np.array([['Spending_Rate', 'Credit_Card_Balance', 'Account_Balance', 'Loan_Amount', 'Age', 'Loan-to-Credit_Ratio', 'Loan_Term', 'Transaction_Amount', 'Loan_Type']])
     prediction = model.predict(features)
     return prediction
 
