@@ -23,32 +23,6 @@ def load_model():
 # Instantiate the model
 model = load_model()
 
-st.title("Loan Approval Prediction App🚀")
-
-html_temp = """
-    <div style="background-color:teal;padding:10px">
-        <h1 style="color:white;text-align:center;">Bytes x Brains 💻🧠</h1>
-    </div>
-    """
-st.markdown(html_temp, unsafe_allow_html=True)
-
-st.subheader("This loan prediction application is developed to be able to give realtime suggestions on approval or rejection for\
-              loan applicants, given their provided details.")
-
-# Inputs
-Name = st.text_input('Kindly enter your name')
-Age = st.slider('How old are you?', 18, 70)
-Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
-Credit_Card_Balance = st.number_input('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
-Loan_Amount = st.number_input('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
-Loan_Type = st.selectbox('What is this loan for?', ['Personal', 'Mortgage', 'Auto'])
-Loan_Term = st.slider('Loan term (months)', min_value=1, max_value=60)
-Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
-
-# Derived features
-Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)  # prevent divide-by-zero
-Loan_to_Credit_Ratio = Loan_Amount / 5550
-
 def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
             Loan_to_Credit_Ratio, Loan_Term, Transaction_Amount, Loan_Type):
 
@@ -59,26 +33,49 @@ def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Ag
     features = np.array([[Spending_Rate, Credit_Card_Balance, Account_Balance,
                           Loan_Amount, Age, Loan_to_Credit_Ratio,
                           Loan_Term, Transaction_Amount, Loan_Type]])
-
     prediction = model.predict(features)
     return prediction
 
 def main():
+    st.title("Loan Approval Prediction App🚀")
+    html_temp = """
+    <div style="background-color:teal;padding:10px">
+        <h1 style="color:white;text-align:center;">Bytes x Brains 💻🧠</h1>
+    </div>
+    """
+    st.markdown(html_temp, unsafe_allow_html=True)
+
+    st.subheader("This loan prediction application is developed to be able to give realtime suggestions on approval or rejection for\
+              loan applicants, given their provided details.")
+
+    # Inputs
+    Name = st.text_input('Kindly enter your name')
+    Age = st.slider('How old are you?', 18, 70)
+    Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
+    Credit_Card_Balance = st.number_input('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
+    Loan_Amount = st.number_input('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
+    Loan_Type = st.selectbox('What is this loan for?', ['Personal', 'Mortgage', 'Auto'])
+    Loan_Term = st.slider('Loan term (months)', min_value=1, max_value=60)
+    Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
+
+    # Derived features
+    Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)  # prevent divide-by-zero
+    Loan_to_Credit_Ratio = Loan_Amount / 5550
+    
     if st.button("Predict"):
-        if model:
-            predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance,
+        predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance,
                                       Loan_Amount, Age, Loan_to_Credit_Ratio,
                                       Loan_Term, Transaction_Amount, Loan_Type)
-            if predictions[0] == 0:
-                st.success(f"Congratulations {Name}, your loan request is Approved!")
-            elif predictions[0] == 2:
-                st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
-            else:
-                st.info(f"Dear {Name}, your loan request is currently Closed.")
+        if predictions[0] == 0:
+            st.success(f"Congratulations {Name}, your loan request is Approved!")
+        elif predictions[0] == 2:
+            st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
         else:
-            st.error("Model not found. Please check your model file path.")
-        with st.expander("▶️ About the App!"):
-            st.write("""This loan prediction application is proudly developed by Team Bytes x Brains💻🧠 for the TDI Hackathon project.""")
+            st.info(f"Dear {Name}, your loan request is currently Closed.")
+    else:
+        st.error("Model not found. Please check your model file path.")
+    with st.expander("▶️ About the App!"):
+        st.write("""This loan prediction application is proudly developed by Team Bytes x Brains💻🧠 for the TDI Hackathon project.""")
 
 if __name__=='__main__':
     main()
