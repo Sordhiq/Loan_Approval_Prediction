@@ -12,10 +12,17 @@ st.set_page_config(
     layout="centered"
 )
 
-@st.cache_ressource
-with open('loan_prediction_model.pkl', 'rb') as f:
-    model = pickle.load(f)
-
+@st.cache_resource
+def load_model():
+  try:
+    with open("loan_prediction_model.pkl.pkl", "rb") as file:
+      mod = pickle.load(file)
+    return mod
+    
+  except FileNotFoundError:
+    return None
+# Instantiating the model
+model = load_model()
 
 st.header('Loan Approval Predction Appppppp')
 
