@@ -1,7 +1,6 @@
 streamlit
 pandas 
 numpy
-pickle
 scikit-learn
 google
 google-generativeai
