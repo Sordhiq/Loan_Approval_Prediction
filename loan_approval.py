@@ -24,8 +24,7 @@ def load_model():
 # Instantiate the model
 model = load_model()
 
-def predict(Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
-            Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount):
+def predict(Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount):
 
     # Features array
     features = np.array([[Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount]])
