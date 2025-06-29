@@ -27,9 +27,6 @@ model = load_model()
 def predict(Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
             Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount):
 
-    loan_type_map = {"Auto": 0, "Personal": 1, "Mortgage": 2}
-    Loan_Type = loan_type_map.get(Loan_Type, -1)
-
     # Features array
     features = np.array([[Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
             Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount]])
@@ -61,7 +58,7 @@ def main():
 
     # Derived features
     Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)  # prevent divide-by-zero
-    Loan_to_Credit_Ratio = Loan_Amount / Creedit_Limit
+    Loan_to_Credit_Ratio = Loan_Amount / Credit_Limit
     Credit_Utilization = Credit_Card_Balance / Credit_Limit
     
     if st.button("Predict"):
