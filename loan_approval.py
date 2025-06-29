@@ -31,17 +31,9 @@ model = load_model()
 # -----------------------------------------
 # Prediction Function
 # -----------------------------------------
-def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate,
-                        Account_Balance, Credit_Card_Balance,
-                        Transaction_Amount, Spending_Rate,
-                        Credit_Limit, Loan_to_Credit_Ratio,
-                        Credit_Utilization):
+def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization):
 
-    features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate,
-                          Account_Balance, Credit_Card_Balance,
-                          Transaction_Amount, Spending_Rate,
-                          Credit_Limit, Loan_to_Credit_Ratio,
-                          Credit_Utilization]])
+    features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
 
     prediction = model.predict(features)
     return prediction
@@ -89,11 +81,7 @@ def main():
             st.error("Model not found. Please check the file path.")
             return
 
-        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate,
-                                         Account_Balance, Credit_Card_Balance,
-                                         Transaction_Amount, Spending_Rate,
-                                         Credit_Limit, Loan_to_Credit_Ratio,
-                                         Credit_Utilization)
+        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization)
 
         if prediction[0] == 0:
             st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
@@ -106,7 +94,7 @@ def main():
     # App Footer
     # -----------------------
     with st.expander("▶️ About the App!"):
-        st.write("""This loan prediction application is proudly developed by Team Bytes x Brains 💻🧠 for the TDI Hackathon project.""")
+        st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
 
 # -----------------------------------------
 # Run the app
