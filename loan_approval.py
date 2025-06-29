@@ -45,7 +45,7 @@ def main():
 
     html_temp = """
     <div style="background-color:teal;padding:10px">
-        <h1 style="color:white;text-align:center;">Bytes x Brains 💻🧠</h1>
+        <h1 style="color:white;text-align:center;">Byte x Brains 💻🧠</h1>
     </div>
     """
     st.markdown(html_temp, unsafe_allow_html=True)
@@ -75,10 +75,7 @@ def main():
     # -----------------------
     # Prediction Trigger
     # -----------------------
-    if st.button("Predict"):
-        if model is None:
-            st.error("Model not found. Please check the file path.")
-            return
+    if st.button("Predict")
         prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization)
         if prediction[0] == 0:
             st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
@@ -93,8 +90,6 @@ def main():
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
 
-# -----------------------------------------
-# Run the app
 # -----------------------------------------
 if __name__ == '__main__':
     main()
