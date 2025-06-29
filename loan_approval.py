@@ -16,7 +16,7 @@ st.set_page_config(
 def load_model():
     try:
         with open("loan_prediction_model.pkl.pkl", "rb") as file:
-        mod = pickle.load(file)
+            mod = pickle.load(file)
         return mod
     except FileNotFoundError:
         return None
