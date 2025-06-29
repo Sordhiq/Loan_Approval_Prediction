@@ -3,7 +3,7 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
-import google.generativeai as genai
+import google.generativeai as genai 
 
 # Set page config
 st.set_page_config(
