@@ -20,7 +20,7 @@ st.set_page_config(
 @st.cache_resource
 def load_model():
     with open("loan_prediction_model.pkl", "rb") as file:
-    mod = pickle.load(file)
+        mod = pickle.load(file)
     return mod
     
 
