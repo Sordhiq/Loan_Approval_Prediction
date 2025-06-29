@@ -19,12 +19,10 @@ st.set_page_config(
 # -----------------------------------------
 @st.cache_resource
 def load_model():
-    try:
-        with open("loan_prediction_model.pkl", "rb") as file:
-            mod = pickle.load(file)
-        return mod
-    except FileNotFoundError:
-        return print('File Error')
+    with open("loan_prediction_model.pkl", "rb") as file:
+    mod = pickle.load(file)
+    return mod
+    
 
 model = load_model()
 
