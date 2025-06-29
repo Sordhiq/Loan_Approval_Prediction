@@ -24,7 +24,7 @@ def load_model():
 # Instantiate the model
 model = load_model()
 
-def predict(Rewards_Points, Credit_Card_Balance, Interest_Rate, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount):
+def predic(Rewards_Points, Credit_Card_Balance, Interest_Rate, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount):
 
     # Features array
     features = np.array([[Rewards_Points, Credit_Card_Balance, Interest_Rate, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount]])
@@ -60,7 +60,7 @@ def main():
     Credit_Utilization = Credit_Card_Balance / Credit_Limit
     
     if st.button("Predict"):
-        predictions = predict(Rewards_Points, Credit_Card_Balance, Interest_Rate, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount)
+        predictions = predic(Rewards_Points, Credit_Card_Balance, Interest_Rate, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount)
         
         if predictions[0] == 0:
             st.success(f"Congratulations {Name}, your loan request is Approved!")
