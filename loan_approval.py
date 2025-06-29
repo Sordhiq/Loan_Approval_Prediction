@@ -1,39 +1,50 @@
+# ------------------ IMPORTS ------------------
 import pandas as pd
 import numpy as np
-import sklearn
 import streamlit as st
 import pickle
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.model_selection import train_test_split
 
-# -----------------------------------------
-# Page Configuration
-# -----------------------------------------
+# ------------------ PAGE CONFIG ------------------
 st.set_page_config(
     page_title="Loan Prediction App",
     page_icon="💰",
     layout="centered"
 )
 
-# -----------------------------------------
-# Load Trained Model
-# -----------------------------------------
+# ------------------ CACHED MODEL LOADING & TRAINING ------------------
 @st.cache_resource
+def load_model():
+    data = pd.read_csv('dataset.csv')
 
-data = pd.read_csv('dataset.csv')
-boosting1 = AdaBoostClassifier(n_estimators=200, random_state=11)
-final_data = data[['Age', 'Rewards Points', 'Loan Amount', 'Interest Rate', 'Account Balance', 'Credit Card Balance', 'Transaction Amount',\
-                'Spending Rate', 'Credit Limit', 'Loan-to-Credit Ratio', 'Credit Utilization', 'Loan Status']]
-final_data.columns = final_data.columns.str.strip()
-final_data.columns = final_data.columns.str.replace('-', '_').str.replace(' ', '_')
-X1 = final_data.drop('Loan_Status', axis=1)
-y1 = final_data['Loan_Status']
-X1_train, X1_test, y1_train, y1_test = train_test_split(X1, y1, test_size=0.2, random_state=11)
-boosting1.fit(X1_train, y1_train)
+    # Clean column names
+    data.columns = data.columns.str.strip().str.replace('-', '_').str.replace(' ', '_')
 
-model = boosting1
+    # Select and prepare features
+    features = ['Age', 'Rewards_Points', 'Loan_Amount', 'Interest_Rate', 'Account_Balance',
+                'Credit_Card_Balance', 'Transaction_Amount', 'Spending_Rate',
+                'Credit_Limit', 'Loan_to_Credit_Ratio', 'Credit_Utilization', 'Loan_Status']
 
-# Streamlit UI
-# -----------------------------------------
+    if not set(features).issubset(data.columns):
+        raise ValueError("Required columns missing in the dataset")
+
+    final_data = data[features]
+
+    # Split data
+    X = final_data.drop('Loan_Status', axis=1)
+    y = final_data['Loan_Status']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=11)
+
+    # Train model
+    model = AdaBoostClassifier(n_estimators=200, random_state=11)
+    model.fit(X_train, y_train)
+
+    return model
+
+model = load_model()
+
+# ------------------ MAIN FUNCTION ------------------
 def main():
     st.title("Loan Approval Prediction App 🚀")
 
@@ -44,11 +55,9 @@ def main():
     """
     st.markdown(html_temp, unsafe_allow_html=True)
 
-    st.write("This loan prediction application provides real-time suggestions on approval or rejection for loan applicants based on their provided details.")
+    st.write("This app provides real-time suggestions on loan approval or rejection based on applicant details.")
 
-    # -----------------------
-    # User Inputs
-    # -----------------------
+    # ------------------ USER INPUTS ------------------
     Name = st.text_input('Kindly enter your name')
     Age = st.slider('How old are you?', 18, 70)
     Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
@@ -59,26 +68,22 @@ def main():
     Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
     Interest_Rate = st.slider('Interest accumulated', 0.0, 100.0)
 
-    # -----------------------
-    # Derived Features
-    # -----------------------
+    # ------------------ FEATURE ENGINEERING ------------------
     Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
     Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
     Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
 
-    def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
-        Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
-        Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
-        Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
-        
-        features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
+    # ------------------ PREDICTION ------------------
+    def predict_loan_status():
+        features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate,
+                              Account_Balance, Credit_Card_Balance, Transaction_Amount,
+                              Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
         prediction = model.predict(features)
         return prediction
-    # -----------------------
-    # Prediction Trigger
-    # -----------------------
-    if st.button("Predict"): 
-        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit)
+
+    if st.button("Predict"):
+        prediction = predict_loan_status()
+
         if prediction[0] == 0:
             st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
         elif prediction[0] == 2:
@@ -86,20 +91,10 @@ def main():
         else:
             st.info(f"ℹ️ Dear {Name}, your loan request is currently Closed.")
 
-    # -----------------------
-    # App Footer
-    # -----------------------
+    # ------------------ ABOUT SECTION ------------------
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
 
-
-# -----------------------------------------
-# Prediction Function
-# -----------------------------------------
-
-
-# -----------------------------------------
-
-# -----------------------------------------
+# ------------------ RUN APP ------------------
 if __name__ == '__main__':
     main()
