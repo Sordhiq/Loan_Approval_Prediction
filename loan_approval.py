@@ -3,7 +3,7 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
-from sklearn.preprocessing import StandardScaler
+import google.generativeai as genai
 
 # Set page config
 st.set_page_config(
@@ -24,18 +24,15 @@ def load_model():
 # Instantiate the model
 model = load_model()
 
-def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
-            Loan_to_Credit_Ratio, Loan_Term, Transaction_Amount, Loan_Type):
+def predict(Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
+            Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount):
 
     loan_type_map = {"Auto": 0, "Personal": 1, "Mortgage": 2}
     Loan_Type = loan_type_map.get(Loan_Type, -1)
 
     # Features array
-    features = np.array([[Spending_Rate, Credit_Card_Balance, Account_Balance,
-                          Loan_Amount, Age, Loan_to_Credit_Ratio,
-                          Loan_Term, Transaction_Amount, Loan_Type]])
-    scaler = StandardScaler()
-    features = scaler.fit_transform(features)
+    features = np.array([[Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
+            Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount]]
                 
     prediction = model.predict(features)
     return prediction
@@ -58,18 +55,19 @@ def main():
     Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
     Credit_Card_Balance = st.number_input('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
     Loan_Amount = st.number_input('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
-    Loan_Type = st.selectbox('What is this loan for?', ['Personal', 'Mortgage', 'Auto'])
-    Loan_Term = st.slider('Loan term (months)', min_value=1, max_value=60)
+    Rewards_Points = st.slider('Accumulated Reward Points on your credit card', 0, 1000)
+    Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1000)
     Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
 
     # Derived features
     Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)  # prevent divide-by-zero
-    Loan_to_Credit_Ratio = Loan_Amount / 5550
+    Loan_to_Credit_Ratio = Loan_Amount / Creedit_Limit
+    Credit_Utilization = Credit_Card_Balance / Credit_Limit
     
     if st.button("Predict"):
-        predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance,
-                                      Loan_Amount, Age, Loan_to_Credit_Ratio,
-                                      Loan_Term, Transaction_Amount, Loan_Type)
+        predictions = predict(Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
+            Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount)
+        
         if predictions[0] == 0:
             st.success(f"Congratulations {Name}, your loan request is Approved!")
         elif predictions[0] == 2:
