@@ -32,7 +32,7 @@ def predict(Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, A
 
     # Features array
     features = np.array([[Rewards_Points, Credit_Card_Balance, Account_Balance, Loan_Amount, Age,
-            Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount]]
+            Loan_to_Credit_Ratio, Credit_Limit, Transaction_Amount]])
                 
     prediction = model.predict(features)
     return prediction
