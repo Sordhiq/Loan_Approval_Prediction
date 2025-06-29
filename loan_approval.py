@@ -18,6 +18,8 @@ st.set_page_config(
 # Load Trained Model
 # -----------------------------------------
 @st.cache_resource
+
+data = pd.read_csv('dataset.csv')
 boosting1 = AdaBoostClassifier(n_estimators=200, random_state=11)
 final_data = data[['Age', 'Rewards Points', 'Loan Amount', 'Interest Rate', 'Account Balance', 'Credit Card Balance', 'Transaction Amount',\
                 'Spending Rate', 'Credit Limit', 'Loan-to-Credit Ratio', 'Credit Utilization', 'Loan Status']]
