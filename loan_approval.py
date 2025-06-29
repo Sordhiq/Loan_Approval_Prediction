@@ -28,16 +28,6 @@ def load_model():
 
 model = load_model()
 
-# -----------------------------------------
-# Prediction Function
-# -----------------------------------------
-def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization):
-
-    features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
-    prediction = model.predict(features)
-    return prediction
-
-# -----------------------------------------
 # Streamlit UI
 # -----------------------------------------
 def main():
@@ -72,6 +62,11 @@ def main():
     Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
     Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
 
+    def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
+
+        features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
+        prediction = model.predict(features)
+        return prediction
     # -----------------------
     # Prediction Trigger
     # -----------------------
@@ -89,6 +84,14 @@ def main():
     # -----------------------
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
+
+
+# -----------------------------------------
+# Prediction Function
+# -----------------------------------------
+
+
+# -----------------------------------------
 
 # -----------------------------------------
 if __name__ == '__main__':
