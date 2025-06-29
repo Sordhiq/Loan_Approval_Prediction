@@ -3,6 +3,7 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
+from sklearn.ensemble import AdaBoostClassifier
 
 # -----------------------------------------
 # Page Configuration
@@ -17,17 +18,18 @@ st.set_page_config(
 # Load Trained Model
 # -----------------------------------------
 @st.cache_resource
-def load_model():
-  try:
-    with open("loan_prediction_model.pkl", "rb") as file:
-      mod = pickle.load(file)
-    return mod
-    
-  except FileNotFoundError:
-    st.error("You have attempted to load a wrong pickle file")
-    return None
 
-model = load_model()
+boosting1 = AdaBoostClassifier(n_estimators=200, random_state=11)
+final_data = data[['Age', 'Rewards Points', 'Loan Amount', 'Interest Rate', 'Account Balance', 'Credit Card Balance', 'Transaction Amount',\
+                'Spending Rate', 'Credit Limit', 'Loan-to-Credit Ratio', 'Credit Utilization', 'Loan Status']]
+final_data.columns = final_data.columns.str.strip()
+final_data.columns = final_data.columns.str.replace('-', '_').str.replace(' ', '_')
+X1 = final_data.drop('Loan_Status', axis=1)
+y1 = final_data['Loan_Status']
+X1_train, X1_test, y1_train, y1_test = train_test_split(X1, y1, test_size=0.2, random_state=11)
+boosting1.fit(X1_train, y1_train)
+
+model = boosting1
 
 # Streamlit UI
 # -----------------------------------------
