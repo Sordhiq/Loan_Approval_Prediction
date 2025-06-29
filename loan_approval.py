@@ -24,7 +24,7 @@ def load_model():
             mod = pickle.load(file)
         return mod
     except FileNotFoundError:
-        return None
+        return print('File Error')
 
 model = load_model()
 
