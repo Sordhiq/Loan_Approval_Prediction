@@ -27,8 +27,8 @@ def load_model():
   except FileNotFoundError:
     st.error("You have attempted to load a wrong pickle file")
     return None
-    
-model = load_model()
+
+model = load_model
 
 # Streamlit UI
 # -----------------------------------------
@@ -50,12 +50,12 @@ def main():
     Name = st.text_input('Kindly enter your name')
     Age = st.slider('How old are you?', 18, 70)
     Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
-    Credit_Card_Balance = st.number_input('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
-    Loan_Amount = st.number_input('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
+    Credit_Card_Balance = st.slider('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
+    Loan_Amount = st.slider('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
     Rewards_Points = st.slider('Accumulated Reward Points on your credit card', 0, 10000)
     Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1_000_000)
     Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
-    Interest_Rate = st.number_input('Interest accumulated', 0.0, 100.0)
+    Interest_Rate = st.slider('Interest accumulated', 0.0, 100.0)
 
     # -----------------------
     # Derived Features
