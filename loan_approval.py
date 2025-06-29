@@ -4,6 +4,8 @@ import sklearn
 import streamlit as st
 import pickle 
 from sklearn.preprocessing import OrdinalEncoder
+
+
 # Set page config
 st.set_page_config(
     page_title="Loan Prediction App",
@@ -17,10 +19,12 @@ def load_model():
       mod = pickle.load(file)
     return mod
 
-  except FileNotFoundError:
+    except FileNotFoundError:
     return None
 # Instantiating the model
+
 model = load_model()
+
 st.header('Loan Approval Predction Appppppp')
 Name = st.text_input('Kindly enter your name')
 Age = st.slider('How old are you', 18, 70)
@@ -51,15 +55,15 @@ def main():
 
     """This is a platform where you could enter Applicant's details and get prediction about their eligibility for Loan requests"""  
     st.subheader("Bytes x Brains💻🧠")
-if st.button("Predict"):
-    predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Loan_Term, Transaction_Amount, Loan_Type)
-    if predictions[0] == 0:
-        st.success(f"Congratulations {Name}, your loan request is Approved!")
-        print(Loan_Amount)
-    elif prediction[0] == 2:
-        st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
-    else:
-        st.success(f"Dear {Name}, your loan request is currently Closed!")
+    if st.button("Predict"):
+        predictions = predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Age, Loan_to_Credit_Ratio, Loan_Term, Transaction_Amount, Loan_Type)
+        if predictions[0] == 0:
+            st.success(f"Congratulations {Name}, your loan request is Approved!")
+            print(Loan_Amount)
+        elif prediction[0] == 2:
+            st.warning(f"Sorry {Name}, your loan request is hereby Rejected!")
+        else:
+            st.success(f"Dear {Name}, your loan request is currently Closed!")
 
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Bytes x Brains💻🧠 for the TDI Hackathon project""")
