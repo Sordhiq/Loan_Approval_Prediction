@@ -53,6 +53,7 @@ def main():
     Rewards_Points = st.slider('Accumulated Reward Points on your credit card', 0, 1000)
     Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1000)
     Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
+    Interest_Rate = st.slider('Interest accumulated', 0, 1_000_000)
 
     # Derived features
     Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)  # prevent divide-by-zero
