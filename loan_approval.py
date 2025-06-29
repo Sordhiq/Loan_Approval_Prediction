@@ -3,6 +3,7 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
+from sklearn.preprocessing import StandardScaler
 
 # Set page config
 st.set_page_config(
@@ -33,6 +34,9 @@ def predict(Spending_Rate, Credit_Card_Balance, Account_Balance, Loan_Amount, Ag
     features = np.array([[Spending_Rate, Credit_Card_Balance, Account_Balance,
                           Loan_Amount, Age, Loan_to_Credit_Ratio,
                           Loan_Term, Transaction_Amount, Loan_Type]])
+    scaler = StandardScaler()
+    features = scaler.fit_transform(features)
+                
     prediction = model.predict(features)
     return prediction
 
