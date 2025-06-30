@@ -90,7 +90,7 @@ def generate_ai_recommendation(
         - Suggest steps to strengthen their application
         - Provide guidance on what documents or improvements might be needed
         
-        Make the response contextualized for a Nigerian loan applicant, keep it under 300 words, friendly, and actionable. Use bullet points for clarity.
+        Make the response contextualized for a Nigerian loan applicant, keep it under 300 words, slightly jovial, friendly, and actionable. Use bullet points for clarity.
         """
         
         # Generate response using Gemini
@@ -158,12 +158,12 @@ def main():
     # Input fields
     Name = st.text_input('Kindly enter your name')
     Age = st.slider('How old are you?', 18, 70)
-    Account_Balance = st.slider('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
-    Credit_Card_Balance = st.slider('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
-    Loan_Amount = st.slider('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
-    Rewards_Points = st.slider('Accumulated Reward Points on your credit card', 0, 10000)
-    Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1_000_000)
-    Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
+    Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
+    Credit_Card_Balance = st.number_input('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
+    Loan_Amount = st.number_input('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
+    Rewards_Points = st.number_input('Accumulated Reward Points on your credit card', 0, 10000)
+    Credit_Limit = st.number_input('Maximum credit allowed on your card', min_value=1, max_value=1_000_000)
+    Transaction_Amount = st.number_input('Last transaction amount', 0, 1_000_000)
     Interest_Rate = st.number_input('Interest accumulated', 0.0, 100.0)
 
     if st.button("Predict"): 
