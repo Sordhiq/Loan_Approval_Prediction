@@ -28,6 +28,11 @@ def load_model():
 model = load_model()
 
 def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization):
+        # -------------------------
+        Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
+        Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
+        Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
+        # -------------------------
         features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
         prediction = model.predict(features)
         return prediction
@@ -53,14 +58,10 @@ def main():
     Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1_000_000)
     Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
     Interest_Rate = st.number_input('Interest accumulated', 0.0, 100.0)
-    # ---------------------------------
-    Spending_Rate = st.slider('Spending Habit', 0, 1_000_000)
-    Loan_to_Credit_Ratio = st.slider('Loan/Credit Ratio', 0, 1_000_000)
-    Credit_Utilization = st.slider('Credit Usage Rate', 0, 1_000_000)
-    
+      
     # -------------------------------
     if st.button("Predict"): 
-        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization)
+        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit)
         if prediction[0] == 0:
             st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
         elif prediction[0] == 2:
