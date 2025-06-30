@@ -1,9 +1,7 @@
 import pandas as pd
 import numpy as np
-import sklearn
 import streamlit as st
 import pickle
-# import google.generativeai as genai  # 🔁 REMOVE if unused
 
 # -----------------------------------------
 # Page Configuration
@@ -14,6 +12,9 @@ st.set_page_config(
     layout="centered"
 )
 
+# -----------------------------------------
+# Load Trained Model
+# -----------------------------------------
 @st.cache_resource
 def load_model():
     try:
@@ -21,57 +22,74 @@ def load_model():
             model = pickle.load(file)
         return model
     except FileNotFoundError:
-        st.error("The file you have attempted to load does not exist in the file directory.\
-                 Kindly recheck please.")
+        st.error("The model file does not exist. Please check the filename and location.")
         return None
-        
+
 model = load_model()
 
-def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization):
-        # -------------------------
-        Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
-        Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
-        Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
-        # -------------------------
-        features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
-        prediction = model.predict(features)
-        return prediction
+# -----------------------------------------
+# Prediction Function
+# -----------------------------------------
+def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
 
+    # Feature Engineering
+    Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
+    Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
+    Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
+
+    # Combine into feature array
+    features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
+    
+    prediction = model.predict(features)
+    return prediction
+
+# -----------------------------------------
+# Streamlit UI
+# -----------------------------------------
 def main():
     st.title("Loan Approval Prediction App 🚀")
 
-    html_temp = """
+    st.markdown("""
     <div style="background-color:teal;padding:10px">
         <h1 style="color:white;text-align:center;">Byte x Brains 💻🧠</h1>
     </div>
-    """
-    st.markdown(html_temp, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
-    st.write("This loan prediction application provides real-time suggestions on approval or rejection for loan applicants based on their provided details.")
+    st.write("This app predicts whether a loan will be approved, rejected, or closed based on customer financial behavior.")
 
     Name = st.text_input('Kindly enter your name')
     Age = st.slider('How old are you?', 18, 70)
-    Account_Balance = st.slider('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
-    Credit_Card_Balance = st.slider('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
-    Loan_Amount = st.slider('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
+    Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
+    Credit_Card_Balance = st.number_input('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
+    Loan_Amount = st.number_input('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
     Rewards_Points = st.slider('Accumulated Reward Points on your credit card', 0, 10000)
-    Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1_000_000)
-    Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
-    Interest_Rate = st.number_input('Interest accumulated', 0.0, 100.0)
-      
+    Credit_Limit = st.number_input('Maximum credit allowed on your card', min_value=1.0, max_value=1_000_000.0)
+    Transaction_Amount = st.number_input('Last transaction amount', min_value=0.0, max_value=1_000_000.0)
+    Interest_Rate = st.number_input('Interest accumulated', min_value=0.0, max_value=100.0)
+
     # -------------------------------
     if st.button("Predict"): 
-        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit)
-        if prediction[0] == 0:
-            st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
-        elif prediction[0] == 2:
-            st.warning(f"😞 Sorry {Name}, your loan request is Rejected.")
+        if model is None:
+            st.error("⚠️ Unable to load the model. Prediction cannot proceed.")
         else:
-            st.info(f"ℹ️ Dear {Name}, your loan request is currently Closed.")
+            prediction = predict_loan_status(
+                Age, Rewards_Points, Loan_Amount, Interest_Rate,
+                Account_Balance, Credit_Card_Balance,
+                Transaction_Amount, Credit_Limit
+            )
+
+            if prediction[0] == 0:
+                st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
+            elif prediction[0] == 2:
+                st.warning(f"😞 Sorry {Name}, your loan request is Rejected.")
+            else:
+                st.info(f"ℹ️ Dear {Name}, your loan request is currently Closed.")
 
     with st.expander("▶️ About the App!"):
-        st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
-    # ------------------------
+        st.write("This app was developed by Team Byte x Brains 💻🧠 for the TDI Hackathon.")
 
-if __name__=='__main__':
+# -----------------------------------------
+# Run the App
+# -----------------------------------------
+if __name__ == '__main__':
     main()
