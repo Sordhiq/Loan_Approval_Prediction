@@ -3,6 +3,8 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
+from sklearn.model_selection inport train_test_split
+from sklearn.ensemble import AdaBoostClassifier
 # import google.generativeai as genai  # 🔁 REMOVE if unused
 
 # -----------------------------------------
@@ -24,9 +26,22 @@ def load_model():
   except FileNotFoundError:
     st.error("You have attempted to load a wrong pickle file")
     return None
+# --------------------
+data = pd.read_csv('dataset.csv')
+boosting1 = AdaBoostClassifier(n_estimators=10, random_state=11)
+final_data = data[['Age', 'Rewards Points', 'Loan Amount', 'Interest Rate', 'Account Balance', 'Credit Card Balance', 'Transaction Amount',\
+                'Spending Rate', 'Credit Limit', 'Loan-to-Credit Ratio', 'Credit Utilization', 'Loan Status']]
+final_data.columns = final_data.columns.str.strip()
+final_data.columns = final_data.columns.str.replace('-', '_').str.replace(' ', '_')
+X1 = final_data.drop('Loan_Status', axis=1)
+y1 = final_data['Loan_Status']
+X1_train, X1_test, y1_train, y1_test = train_test_split(X1, y1, test_size=0.2, random_state=11)
+boosting1.fit(X1_train, y1_train)
+model = boosting1.predict(X1_test)
 
+# --------------------
 # Instantiating model
-model = load_model()
+# model = load_model()
 
 def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
     Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
