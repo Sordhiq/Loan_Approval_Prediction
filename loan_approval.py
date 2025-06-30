@@ -72,12 +72,7 @@ def main():
         if model is None:
             st.error("⚠️ Unable to load the model. Prediction cannot proceed.")
         else:
-            prediction = predict_loan_status(
-                Age, Rewards_Points, Loan_Amount, Interest_Rate,
-                Account_Balance, Credit_Card_Balance,
-                Transaction_Amount, Credit_Limit
-            )
-
+            prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit)
             if prediction[0] == 0:
                 st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
             elif prediction[0] == 2:
