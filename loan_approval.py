@@ -1,98 +1,56 @@
-import pandas as pd
+eimport pandas as pd
 import numpy as np
-import sklearn
-import streamlit as st
 import pickle
-# import google.generativeai as genai  # 🔁 REMOVE if unused
+import streamlit as st
 
-# -----------------------------------------
-# Page Configuration
-# -----------------------------------------
+# Set page config
 st.set_page_config(
-    page_title="Loan Prediction App",
-    page_icon="💰",
+    page_title="Malaria Prediction App",
+    page_icon="🔖",
     layout="centered"
 )
 
-# -----------------------------------------
-# Load Trained Model
-# -----------------------------------------
 @st.cache_resource
 def load_model():
-    try:
-        with open("loan_prediction_model.pkl", "rb") as file:
-            mod = pickle.load(file)
-        return mod
-    except FileNotFoundError:
-        return None
+  try:
+    with open("loan_prediction_model.pkl", "rb") as file:
+      mod = pickle.load(file)
+    return mod
+    
+  except FileNotFoundError:
+    st.error("You have attempted to load a wrong pickle file")
+    return None
 
+# Instantiating model
 model = load_model()
 
-# Streamlit UI
-# -----------------------------------------
-def main():
-    st.title("Loan Approval Prediction App 🚀")
+def predi(rainfall_rolling, rainfall_lag, cumulative_rainfall):
+  features = np.array([[rainfall_rolling, rainfall_lag, cumulative_rainfall]])
+  prediction = model.predict(features)
+  return prediction
 
+def main():
+    st.title("Malaria Prediction App")
     html_temp = """
-    <div style="background-color:teal;padding:10px">
-        <h1 style="color:white;text-align:center;">Byte x Brains 💻🧠</h1>
+    <div style="background-color:tomato;padding:10px">
+    <h2 style="color:white;text-align:center;">Malaria Prediction App</h2>
     </div>
     """
-    st.markdown(html_temp, unsafe_allow_html=True)
+        
+    """Proudly... Group 2, Climate Accelerator Network (CAN) Training, 2024!"""  
+    st.subheader("This web application uses climatic variables in predicting malaria prevalences")
+   
+    rainfall_rolling = st.number_input("Rainfall Rolling Average", value=17.0, min_value=0.0, max_value=263.0)
+    rainfall_lag = st.number_input("Ranfall Lag 3", value=50.0, min_value=0.0, max_value=400.0)
+    cumulative_rainfall = st.number_input("Cumulative Rainfall", value=4500.0, min_value=1000.0, max_value=8000.0)
+    
+    if st.button("Predict"):
+        predictions = predi(rainfall_rolling, rainfall_lag, cumulative_rainfall)
+        st.success(f"The Predicted Malaria Case is: {int(predictions)}")
+        
+    with st.expander("▶️ About this App!"):
+        st.write("""This machine learning application is proudly developed by Group 2 members of the CAN Data Science Fellowship.\
+                The model uses climatic variables like Rainfall and Temperatures in predicting malaria prevalence.""")
 
-    st.write("This loan prediction application provides real-time suggestions on approval or rejection for loan applicants based on their provided details.")
-
-    # -----------------------
-    # User Inputs
-    # -----------------------
-    Name = st.text_input('Kindly enter your name')
-    Age = st.slider('How old are you?', 18, 70)
-    Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
-    Credit_Card_Balance = st.number_input('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
-    Loan_Amount = st.number_input('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
-    Rewards_Points = st.slider('Accumulated Reward Points on your credit card', 0, 10000)
-    Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1_000_000)
-    Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
-    Interest_Rate = st.number_input('Interest accumulated', 0.0, 100.0)
-
-    # -----------------------
-    # Derived Features
-    # -----------------------
-    Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
-    Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
-    Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
-
-    def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
-
-        features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
-        prediction = model.predict(features)
-        return prediction
-    # -----------------------
-    # Prediction Trigger
-    # -----------------------
-    if st.button("Predict"): 
-        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit)
-        if prediction[0] == 0:
-            st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
-        elif prediction[0] == 2:
-            st.warning(f"😞 Sorry {Name}, your loan request is Rejected.")
-        else:
-            st.info(f"ℹ️ Dear {Name}, your loan request is currently Closed.")
-
-    # -----------------------
-    # App Footer
-    # -----------------------
-    with st.expander("▶️ About the App!"):
-        st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
-
-
-# -----------------------------------------
-# Prediction Function
-# -----------------------------------------
-
-
-# -----------------------------------------
-
-# -----------------------------------------
-if __name__ == '__main__':
+if __name__=='__main__':
     main()
