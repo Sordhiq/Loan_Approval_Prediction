@@ -3,6 +3,7 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
+# import google.generativeai as genai  # 🔁 REMOVE if unused
 
 # -----------------------------------------
 # Page Configuration
@@ -20,38 +21,36 @@ def load_model():
             model = pickle.load(file)
         return model
     except FileNotFoundError:
-        st.error("The file you have attempted to load does not exist in the file directory. Kindly recheck please.")
+        st.error("The file you have attempted to load does not exist in the file directory.\
+                    Kindly recheck please.")
         return None
         
 model = load_model()
 
-# 🔧 FIXED: Simplified function signature - calculate derived features inside
-def predict_loan_status_dummy(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
-    """
-    Temporary prediction function using simple rules
-    Replace this with actual model once you retrain and save it properly
-    """
-    try:
-        # Simple rule-based prediction (replace with your actual model)
-        # This is just an example - adjust based on your business logic
-        
-        credit_utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
-        loan_to_balance_ratio = Loan_Amount / (Account_Balance + 1e-5)
-        
-        # Simple approval logic (customize this)
-        if (credit_utilization < 0.5 and 
-            loan_to_balance_ratio < 2.0 and 
-            Account_Balance > Loan_Amount * 0.1 and
-            Age >= 21):
-            return [0]  # Approved
-        elif credit_utilization > 0.8 or loan_to_balance_ratio > 5.0:
-            return [2]  # Rejected
-        else:
-            return [1]  # Closed/Pending
-            
-    except Exception as e:
-        st.error(f"Prediction error: {str(e)}")
-        return None
+def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization):
+    # -------------------------
+    # These calculations should ideally be done before calling the prediction function
+    # or the function should only take the raw inputs and calculate these internally.
+    # For now, I'm keeping the original structure but acknowledging the redundancy
+    # if these are also passed in as arguments.
+    # Since the user's original code passed them as arguments to the function,
+    # then calculated them *inside* the function, and then used them in the
+    # features array, the correct fix is to ensure the function *receives* all
+    # expected arguments when called.
+    # The user's intent was to calculate these inside the function, but the
+    # function signature declared them as parameters.
+    # Given the user's code, the most direct fix is to calculate these
+    # *before* calling predict_loan_status and pass them in.
+    # Alternatively, the function signature could be changed to only accept the
+    # raw inputs and perform all calculations internally, but this would
+    # be a larger change to the function's contract.
+    # For a minimal fix to the *call* error, we need to pass what the function
+    # *expects*.
+    # -------------------------
+    features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
+    prediction = model.predict(features)
+    return prediction
+
 def main():
     st.title("Loan Approval Prediction App 🚀")
 
@@ -64,7 +63,6 @@ def main():
 
     st.write("This loan prediction application provides real-time suggestions on approval or rejection for loan applicants based on their provided details.")
 
-    # Input fields
     Name = st.text_input('Kindly enter your name')
     Age = st.slider('How old are you?', 18, 70)
     Account_Balance = st.slider('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
@@ -74,47 +72,25 @@ def main():
     Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1_000_000)
     Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
     Interest_Rate = st.number_input('Interest accumulated', 0.0, 100.0)
+      
+    # Calculate the derived features before calling the prediction function
+    Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
+    Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
+    Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
 
-    # 🔧 FIXED: Correct function call with proper parameters
+    # -------------------------------
     if st.button("Predict"): 
-        if not Name.strip():
-            st.warning("Please enter your name.")
-        elif model is None:
-            st.error("Model not loaded. Cannot make predictions.")
+        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization)
+        if prediction[0] == 0:
+            st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
+        elif prediction[0] == 2:
+            st.warning(f"😞 Sorry {Name}, your loan request is Rejected.")
         else:
-            # Call function with the 8 required parameters
-            prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, 
-                                           Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit)
-            
-            if prediction is not None:
-                if prediction[0] == 0:
-                    st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
-                    st.balloons()
-                elif prediction[0] == 2:
-                    st.warning(f"😞 Sorry {Name}, your loan request is Rejected.")
-                else:
-                    st.info(f"ℹ️ Dear {Name}, your loan request is currently Closed.")
-                
-                # 🆕 ADDED: Show calculated metrics
-                with st.expander("📊 Calculated Metrics"):
-                    spending_rate = Transaction_Amount / (Account_Balance + 1e-5)
-                    loan_to_credit = Loan_Amount / (Credit_Limit + 1e-5)
-                    credit_util = Credit_Card_Balance / (Credit_Limit + 1e-5)
-                    
-                    col1, col2, col3 = st.columns(3)
-                    with col1:
-                        st.metric("Spending Rate", f"{spending_rate:.4f}")
-                    with col2:
-                        st.metric("Loan-to-Credit Ratio", f"{loan_to_credit:.4f}")
-                    with col3:
-                        st.metric("Credit Utilization", f"{credit_util:.4f}")
+            st.info(f"ℹ️ Dear {Name}, your loan request is currently Closed.")
 
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
-        st.write("**Features used for prediction:**")
-        st.write("- Age, Reward Points, Loan Amount, Interest Rate")
-        st.write("- Account Balance, Credit Card Balance, Transaction Amount")
-        st.write("- Credit Limit, and calculated ratios")
+    # ------------------------
 
 if __name__=='__main__':
     main()
