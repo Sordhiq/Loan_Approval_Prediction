@@ -5,3 +5,4 @@ scikit-learn
 Google
 google-generativeai
 os
+dotenv
