@@ -29,15 +29,13 @@ def load_model():
 # --------------------
 data = pd.read_csv('dataset.csv')
 boosting1 = AdaBoostClassifier(n_estimators=10, random_state=11)
-final_data = data[['Age', 'Rewards Points', 'Loan Amount', 'Interest Rate', 'Account Balance', 'Credit Card Balance', 'Transaction Amount',\
-                'Spending Rate', 'Credit Limit', 'Loan-to-Credit Ratio', 'Credit Utilization', 'Loan Status']]
+final_data = data[['Age', 'Rewards Points', 'Loan Amount', 'Interest Rate', 'Account Balance', 'Credit Card Balance', 'Transaction Amount', 'Spending Rate', 'Credit Limit', 'Loan-to-Credit Ratio', 'Credit Utilization', 'Loan Status']]
 final_data.columns = final_data.columns.str.strip()
 final_data.columns = final_data.columns.str.replace('-', '_').str.replace(' ', '_')
 X1 = final_data.drop('Loan_Status', axis=1)
 y1 = final_data['Loan_Status']
 X1_train, X1_test, y1_train, y1_test = train_test_split(X1, y1, test_size=0.2, random_state=11)
-boosting1.fit(X1_train, y1_train)
-model = boosting1.predict(X1_test)
+model = boosting1.fit(X1_train, y1_train)
 
 # --------------------
 # Instantiating model
@@ -88,7 +86,6 @@ def main():
         else:
             st.info(f"ℹ️ Dear {Name}, your loan request is currently Closed.")
 
-  
     with st.expander("▶️ About the App!"):
         st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
     # ------------------------
