@@ -29,6 +29,10 @@ def load_model():
 model = load_model()
 
 def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
+    Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
+    Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
+    Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
+    
     features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
     prediction = model.predict(features)
     return prediction
