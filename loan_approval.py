@@ -20,17 +20,15 @@ st.set_page_config(
 # Gemini API Configuration
 # -----------------------------------------
 def configure_gemini():
-    """Configure Gemini API with API key"""
+    """Configure Gemini API with API key from Streamlit secrets"""
     try:
-        # Try to get API key from Streamlit secrets first, then environment variables
-        api_key = st.secrets.get("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY")
-        
-        if not api_key:
-            st.error("🔑 Gemini API key not found. Please set it in Streamlit secrets or environment variables.")
-            return False
-            
+        # Get API key from Streamlit secrets
+        api_key = st.secrets["GEMINI_API_KEY"]
         genai.configure(api_key=api_key)
         return True
+    except KeyError:
+        st.error("🔑 Gemini API key not found in secrets.toml file.")
+        return False
     except Exception as e:
         st.error(f"Error configuring Gemini API: {str(e)}")
         return False
@@ -92,7 +90,7 @@ def generate_ai_recommendation(
         - Suggest steps to strengthen their application
         - Provide guidance on what documents or improvements might be needed
         
-        Keep the response under 300 words, friendly, and actionable. Use bullet points for clarity.
+        Make the response contextualized for a Nigerian loan applicant, keep it under 300 words, friendly, and actionable. Use bullet points for clarity.
         """
         
         # Generate response using Gemini
@@ -151,17 +149,11 @@ def main():
 
     st.write("This loan prediction application provides real-time suggestions on approval or rejection for loan applicants based on their provided details.")
     
-    # Add API key input in sidebar
-    with st.sidebar:
-        st.header("🔧 Configuration")
-        gemini_key = st.text_input(
-            "Gemini API Key", 
-            type="password", 
-            help="Enter your Google Gemini API key for AI recommendations"
-        )
-        if gemini_key:
-            os.environ["GEMINI_API_KEY"] = gemini_key
-            st.success("✅ API Key configured!")
+    # Test Gemini API connection on startup
+    if configure_gemini():
+        st.success("🤖 AI Recommendations Ready!")
+    else:
+        st.warning("⚠️ AI Recommendations unavailable - API configuration issue")
 
     # Input fields
     Name = st.text_input('Kindly enter your name')
