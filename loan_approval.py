@@ -95,7 +95,7 @@ def generate_ai_recommendation(
         
         # Generate response using Gemini
         model = genai.GenerativeModel('gemini-1.5-flash')
-        response = model.generate_content(prompt)
+        response = model.generate_content(prompt) 
         
         return response.text
         
