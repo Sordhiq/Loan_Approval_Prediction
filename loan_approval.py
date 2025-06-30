@@ -60,7 +60,7 @@ def main():
     
     # -------------------------------
     if st.button("Predict"): 
-        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit)
+        prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization)
         if prediction[0] == 0:
             st.success(f"🎉 Congratulations {Name}, your loan request is Approved!")
         elif prediction[0] == 2:
