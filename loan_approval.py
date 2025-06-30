@@ -26,37 +26,33 @@ def load_model():
 model = load_model()
 
 # 🔧 FIXED: Simplified function signature - calculate derived features inside
-def predict_loan_status_dummy(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
-    """
-    Temporary prediction function using simple rules
-    Replace this with actual model once you retrain and save it properly
-    """
+def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
     try:
-        # Simple rule-based prediction (replace with your actual model)
-        # This is just an example - adjust based on your business logic
+        # Calculate derived features inside the function
+        Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
+        Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
+        Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
         
-        credit_utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
-        loan_to_balance_ratio = Loan_Amount / (Account_Balance + 1e-5)
+        # Create feature array with all 11 features
+        features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, 
+                            Credit_Card_Balance, Transaction_Amount, Spending_Rate, 
+                            Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
         
-        # Simple approval logic (customize this)
-        if (credit_utilization < 0.5 and 
-            loan_to_balance_ratio < 2.0 and 
-            Account_Balance > Loan_Amount * 0.1 and
-            Age >= 21):
-            return [0]  # Approved
-        elif credit_utilization > 0.8 or loan_to_balance_ratio > 5.0:
-            return [2]  # Rejected
-        else:
-            return [1]  # Closed/Pending
+        if model is None:
+            return None
             
+        prediction = model.predict(features)
+        return prediction
+    
     except Exception as e:
         st.error(f"Prediction error: {str(e)}")
         return None
+
 def main():
     st.title("Loan Approval Prediction App 🚀")
 
     html_temp = """
-    <div style="background-color:teal;padding:10px">
+    <div style="background-color:teal;padding:13px">
         <h1 style="color:white;text-align:center;">Byte x Brains 💻🧠</h1>
     </div>
     """
