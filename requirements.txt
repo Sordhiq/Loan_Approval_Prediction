@@ -6,3 +6,4 @@ Google
 google-generativeai
 os
 dotenv
+pip
