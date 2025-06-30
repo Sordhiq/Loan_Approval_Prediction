@@ -17,8 +17,8 @@ st.set_page_config(
 def load_model():
     try:
         with open('loan_prediction_model.pkl', 'rb') as file:
-            model = pickle.load(file)
-        return model
+            mod = pickle.load(file)
+        return mod
     except FileNotFoundError:
         st.error("The file you have attempted to load does not exist in the file directory. Kindly recheck please.")
         return None
