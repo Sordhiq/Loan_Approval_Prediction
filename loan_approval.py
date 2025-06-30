@@ -3,8 +3,6 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import AdaBoostClassifier
 # import google.generativeai as genai  # 🔁 REMOVE if unused
 
 # -----------------------------------------
@@ -18,37 +16,21 @@ st.set_page_config(
 
 @st.cache_resource
 def load_model():
-  try:
-    with open("loan_prediction_model.pkl", "rb") as file:
-      mod = pickle.load(file)
-    return mod
-    
-  except FileNotFoundError:
-    st.error("You have attempted to load a wrong pickle file")
-    return None
-# --------------------
-data = pd.read_csv('dataset.csv')
-boosting1 = AdaBoostClassifier(n_estimators=10, random_state=11)
-final_data = data[['Age', 'Rewards Points', 'Loan Amount', 'Interest Rate', 'Account Balance', 'Credit Card Balance', 'Transaction Amount', 'Spending Rate', 'Credit Limit', 'Loan-to-Credit Ratio', 'Credit Utilization', 'Loan Status']]
-final_data.columns = final_data.columns.str.strip()
-final_data.columns = final_data.columns.str.replace('-', '_').str.replace(' ', '_')
-X1 = final_data.drop('Loan_Status', axis=1)
-y1 = final_data['Loan_Status']
-X1_train, X1_test, y1_train, y1_test = train_test_split(X1, y1, test_size=0.2, random_state=11)
-model = boosting1.fit(X1_train, y1_train)
+    try:
+        with open('loan_prediction_model.pkl', 'rb') as file:
+            model = pickle.load(file)
+        return model
+    except FileNotFoundError:
+        st.error("The file you have attempted to load does not exist in the file directory.\
+                 Kindly recheck please.")
+        return None
+        
+model = load_model()
 
-# --------------------
-# Instantiating model
-# model = load_model()
-
-def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit):
-    Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
-    Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
-    Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
-    
-    features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
-    prediction = model.predict(features)
-    return prediction
+def predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization):
+        features = np.array([[Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Spending_Rate, Credit_Limit, Loan_to_Credit_Ratio, Credit_Utilization]])
+        prediction = model.predict(features)
+        return prediction
 
 def main():
     st.title("Loan Approval Prediction App 🚀")
@@ -71,11 +53,11 @@ def main():
     Credit_Limit = st.slider('Maximum credit allowed on your card', min_value=1, max_value=1_000_000)
     Transaction_Amount = st.slider('Last transaction amount', 0, 1_000_000)
     Interest_Rate = st.number_input('Interest accumulated', 0.0, 100.0)
-
-    # -----------------------
-    Spending_Rate = Transaction_Amount / (Account_Balance + 1e-5)
-    Loan_to_Credit_Ratio = Loan_Amount / (Credit_Limit + 1e-5)
-    Credit_Utilization = Credit_Card_Balance / (Credit_Limit + 1e-5)
+    # ---------------------------------
+    Spending_Rate = st.slider('Spending Habit', 0, 1_000_000)
+    Loan_to_Credit_Ratio = st.slider('Loan/Credit Ratio', 0, 1_000_000)
+    Credit_Utilization = st.slider('Credit Usage Rate', 0, 1_000_000)
+    
     # -------------------------------
     if st.button("Predict"): 
         prediction = predict_loan_status(Age, Rewards_Points, Loan_Amount, Interest_Rate, Account_Balance, Credit_Card_Balance, Transaction_Amount, Credit_Limit)
