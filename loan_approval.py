@@ -3,7 +3,7 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
-from sklearn.model_selection inport train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import AdaBoostClassifier
 # import google.generativeai as genai  # 🔁 REMOVE if unused
 
