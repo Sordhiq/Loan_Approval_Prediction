@@ -3,5 +3,5 @@ pandas
 numpy
 scikit-learn
 Google
-google-generative ai
+google-generativeai
 os
