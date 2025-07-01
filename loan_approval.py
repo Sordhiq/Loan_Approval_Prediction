@@ -90,7 +90,8 @@ def generate_ai_recommendation(
         - Suggest steps to strengthen their application
         - Provide guidance on what documents or improvements might be needed
         
-        Make the response contextualized for a Nigerian loan applicant, keep it under 300 words, slightly jovial, friendly, and actionable. Use bullet points for clarity.
+        Make the response contextualized for a Nigerian loan applicant, keep it under 300 words, make it slightly funny, friendly, and actionable. 
+        Use bullet points for clarity. All amounts entered are in Nigerian Naira, so make the responses also in Naira
         """
         
         # Generate response using Gemini
@@ -159,7 +160,7 @@ def main():
     # Input fields
     Name = st.text_input('Kindly enter your name')
     Age = st.slider('How old are you?', 18, 70)
-    Account_Balance = st.number_input('Enter your current account balance', min_value=0.0, max_value=1_000_000.0)
+    Account_Balance = st.number_input('Enter your current account balance (Naira)', min_value=0.0, max_value=1_000_000.0)
     Credit_Card_Balance = st.number_input('Enter your credit card balance', min_value=0.0, max_value=1_000_000.0)
     Loan_Amount = st.number_input('Loan amount requested', min_value=0.0, max_value=1_000_000.0)
     Rewards_Points = st.number_input('Accumulated Reward Points on your credit card', 0, 10000)
