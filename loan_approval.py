@@ -148,7 +148,7 @@ def main():
     st.markdown(html_temp, unsafe_allow_html=True)
 
     st.write("Welcome to the Byte x Brains' AI-powered Loan Prediction App.")
-    st.write("This insightful AI-driven application provides real-time decision on loan approval or rejection, along with a tailored financial advise based on financial history.")
+    st.write("This intelligent system provides real-time loan decision, actionable financial insights along with a tailored financial advise based on financial history.")
     
     # Test Gemini API connection on startup
     if configure_gemini():
