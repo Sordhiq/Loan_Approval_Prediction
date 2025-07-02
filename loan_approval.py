@@ -14,7 +14,7 @@ st.set_page_config(
     page_title="Loan Prediction App",
     page_icon="💰",
     layout="centered"
-)
+) 
 
 # -----------------------------------------
 # Gemini API Configuration
