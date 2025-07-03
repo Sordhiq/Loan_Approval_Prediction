@@ -90,7 +90,7 @@ def generate_ai_recommendation(
         - Suggest steps to strengthen their application
         - Provide guidance on what documents or improvements might be needed
         
-        Make the response contextualized for a Nigerian loan applicant, keep it under 300 words, make it slightly funny, friendly, and actionable. 
+        Make the response contextualized for a Nigerian loan applicant, keep it under 300 words, make it slightly funny and hilarious, friendly, relatable, and actionable. 
         Use bullet points for clarity. All amounts entered are in Nigerian Naira, so make the responses also in Naira
         """
         
@@ -258,7 +258,7 @@ def main():
         st.write("- Age, Reward Points, Loan Amount, Interest Rate")
         st.write("- Account Balance, Credit Card Balance, Transaction Amount")
         st.write("- Credit Limit, and calculated ratios")
-        st.write("\n**New AI Features:**")
+        st.write("\n**AI Features:**")
         st.write("- Personalized financial recommendations powered by Google Gemini")
         st.write("- Context-aware advice based on your financial profile")
         st.write("- Actionable steps for improving loan approval chances")
