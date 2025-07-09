@@ -27,10 +27,10 @@ def configure_gemini():
         genai.configure(api_key=api_key)
         return True
     except KeyError:
-        st.error("🔑 Gemini API key not found in secrets.toml file.")
+        st.error("🔑 API key not found in secrets.toml file.")
         return False
     except Exception as e:
-        st.error(f"Error configuring Gemini API: {str(e)}")
+        st.error(f"Error configuring API: {str(e)}")
         return False
 
 def generate_ai_recommendation(
@@ -253,7 +253,7 @@ def main():
                         st.write("• Seek financial counseling if struggling")
 
     with st.expander("▶️ About the App!"):
-        st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 for the TDI Hackathon project.""")
+        st.write("""This loan prediction application is proudly developed by Team Byte x Brains 💻🧠 at the TDI Hackathon project.""")
         st.write("**Features used for prediction:**")
         st.write("- Age, Reward Points, Loan Amount, Interest Rate")
         st.write("- Account Balance, Credit Card Balance, Transaction Amount")
