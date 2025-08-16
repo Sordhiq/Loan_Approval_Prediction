@@ -1,2 +1,2 @@
-# Loan_Approval_Prediction
-A solution to predict Loan Approval among loan applicants from a financial institution
+# Loan Approval Prediction
+This is predicting Loan Approval and Credit-worthiness among loan applicants from a financial institution
