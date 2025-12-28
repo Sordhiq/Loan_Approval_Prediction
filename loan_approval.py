@@ -95,8 +95,20 @@ def generate_ai_recommendation(
         """
         
         # Generate response using Gemini (Free tier available)
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        response = model.generate_content(prompt) 
+        # Try different model names in order of preference
+        model_names = ['gemini-1.5-flash-latest', 'gemini-1.5-flash', 'gemini-pro']
+        
+        response = None
+        for model_name in model_names:
+            try:
+                model = genai.GenerativeModel(model_name)
+                response = model.generate_content(prompt)
+                break  # If successful, exit loop
+            except Exception as model_error:
+                continue  # Try next model
+        
+        if response is None:
+            raise Exception("No available Gemini models found") 
         
         return response.text
         
