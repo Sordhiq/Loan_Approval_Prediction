@@ -96,7 +96,7 @@ def generate_ai_recommendation(
         
         # Generate response using Gemini (Free tier available)
         # Try different model names in order of preference
-        model_names = ['gemini-1.5-flash-latest', 'gemini-1.5-flash', 'gemini-pro']
+        model_names = ['gemini-1.5-flash-latest', 'gemini-2.5-flash', 'gemini-pro']
         
         response = None
         for model_name in model_names:
