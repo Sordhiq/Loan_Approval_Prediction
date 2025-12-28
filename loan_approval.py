@@ -3,7 +3,7 @@ import numpy as np
 import sklearn
 import streamlit as st
 import pickle
-import google.generativeai as genai
+from openai import OpenAI
 import os
 from typing import Optional
 
@@ -17,21 +17,21 @@ st.set_page_config(
 ) 
 
 # -----------------------------------------
-# Gemini API Configuration
+# OpenAI API Configuration
 # -----------------------------------------
-def configure_gemini():
-    """Configure Gemini API with API key from Streamlit secrets"""
+def configure_openai():
+    """Configure OpenAI API with API key from Streamlit secrets"""
     try:
         # Get API key from Streamlit secrets
-        api_key = st.secrets["GEMINI_API_KEY"]
-        genai.configure(api_key=api_key)
-        return True
+        api_key = st.secrets["OPENAI_API_KEY"]
+        client = OpenAI(api_key=api_key)
+        return client
     except KeyError:
         st.error("🔑 API key not found in secrets.toml file.")
-        return False
+        return None
     except Exception as e:
         st.error(f"Error configuring API: {str(e)}")
-        return False
+        return None
 
 def generate_ai_recommendation(
     name: str,
@@ -46,7 +46,8 @@ def generate_ai_recommendation(
 ) -> Optional[str]:
     """Generate AI-powered recommendations based on loan outcome and user profile"""
     
-    if not configure_gemini():
+    client = configure_openai()
+    if not client:
         return None
     
     try:
@@ -61,8 +62,8 @@ def generate_ai_recommendation(
         **Applicant Profile:**
         - Name: {name}
         - Age: {age}
-        - Loan Amount Requested: ${loan_amount:,.2f}
-        - Account Balance: ${account_balance:,.2f}
+        - Loan Amount Requested: ₦{loan_amount:,.2f}
+        - Account Balance: ₦{account_balance:,.2f}
         - Interest Rate: {interest_rate}%
         
         **Financial Metrics:**
@@ -91,14 +92,21 @@ def generate_ai_recommendation(
         - Provide guidance on what documents or improvements might be needed
         
         Make the response contextualized for a Nigerian loan applicant, keep it under 300 words, make it slightly funny and hilarious, friendly, relatable, and actionable. 
-        Use bullet points for clarity. All amounts entered are in Nigerian Naira, so make the responses also in Naira
+        Use bullet points for clarity. All amounts entered are in Nigerian Naira, so make the responses also in Naira.
         """
         
-        # Generate response using Gemini
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        response = model.generate_content(prompt) 
+        # Generate response using OpenAI
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",  # Using GPT-4o-mini for cost-effectiveness, you can change to "gpt-4o" for better quality
+            messages=[
+                {"role": "system", "content": "You are a helpful, friendly, and slightly humorous financial advisor specializing in Nigerian markets."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=500,
+            temperature=0.7
+        )
         
-        return response.text
+        return response.choices[0].message.content
         
     except Exception as e:
         st.error(f"Error generating AI recommendation: {str(e)}")
@@ -151,8 +159,8 @@ def main():
     st.write("Welcome to the Byte x Brains' AI-powered Loan Prediction App.")
     st.write("This intelligent system provides real-time loan decision, actionable financial insights along with a tailored financial advise based on financial history.")
     
-    # Test Gemini API connection on startup
-    if configure_gemini():
+    # Test OpenAI API connection on startup
+    if configure_openai():
         st.success("🤖 AI Recommendations Ready!")
     else:
         st.warning("⚠️ AI Recommendations unavailable - API configuration issue")
@@ -259,9 +267,9 @@ def main():
         st.write("- Account Balance, Credit Card Balance, Transaction Amount")
         st.write("- Credit Limit, and calculated ratios")
         st.write("\n**AI Features:**")
-        st.write("- Personalized financial recommendations powered by Google Gemini")
+        st.write("- Personalized financial recommendations powered by OpenAI GPT-4")
         st.write("- Context-aware advice based on your financial profile")
         st.write("- Actionable steps for improving loan approval chances")
 
 if __name__=='__main__':
-    main() 
+    main()
